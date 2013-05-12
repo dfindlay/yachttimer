@@ -309,32 +309,39 @@ time_t yachtimer_getLap(YachtTimer *myTimer)
         {
                 case STOPWATCH:
                         t = myTimer->elapsed_time - myTimer->last_lap_time;
-                        myTimer->last_lap_time = myTimer->elapsed_time;
                         break;
                 case YACHTIMER:
                 case COUNTDOWN:
-                        // Save when button was pressed for laptime display
+					if (myTimer->elapsed_time > myTimer->countdown_time)
+					{
+						// Countdown has overrun so treat lap times same as in stopwatch mode
+						t = myTimer->elapsed_time - myTimer->last_lap_time;
+					}
+					else
+					{
+						// Save when button was pressed for laptime display
                         t = myTimer->countdown_time - myTimer->elapsed_time;
+					}
 
-			// Do this os when switching mode does what you expect
-                        myTimer->last_lap_time = myTimer->elapsed_time;
-
-                        if(yachtimer_getMode(myTimer)==YACHTIMER)
-                        {
-
-                                // Now target new gun as started if above 2 mins target 4
-                                // do this even if halted
-                                if(t >= SWITCH4OR1)
-                                {
-                                        yachtimer_setElapsed(myTimer, STARTGUNTIME - BLUEPETERTIME);
-                                }
-                                else  // otherwise target 1 minute
-                                {
-                                        yachtimer_setElapsed(myTimer, STARTGUNTIME - ONEMINUTETIME);
-                                }
-                        }
+//                        if(yachtimer_getMode(myTimer)==YACHTIMER)
+//                        {
+//
+//                                // Now target new gun as started if above 2 mins target 4
+//                                // do this even if halted
+//                                if(t >= SWITCH4OR1)
+//                                {
+//                                        yachtimer_setElapsed(myTimer, STARTGUNTIME - BLUEPETERTIME);
+//                                }
+//                                else  // otherwise target 1 minute
+//                                {
+//                                        yachtimer_setElapsed(myTimer, STARTGUNTIME - ONEMINUTETIME);
+//                                }
+//                        }
                         break;
             }
+	// Always do this so when switching mode does what you expect
+	myTimer->last_lap_time = myTimer->elapsed_time;
+	
         return(t);
 }
 void yachtimer_reset(YachtTimer *myTimer)
