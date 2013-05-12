@@ -350,10 +350,10 @@ void yachtimer_reset(YachtTimer *myTimer)
 		{
 			yachtimer_setElapsed(myTimer, STARTGUNTIME - BLUEPETERTIME);
 		}
-		else  // otherwise target 1 minute
+		else if (t > 0) // otherwise target 1 minute
 		{
 			yachtimer_setElapsed(myTimer, STARTGUNTIME - ONEMINUTETIME);
-		}		
+		}
 	}
 	else
 	{
