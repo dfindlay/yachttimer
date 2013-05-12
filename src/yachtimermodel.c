@@ -312,9 +312,14 @@ time_t yachtimer_getLap(YachtTimer *myTimer)
                         break;
                 case YACHTIMER:
                 case COUNTDOWN:
-					if (myTimer->elapsed_time > myTimer->countdown_time)
+					if (yachtimer_countdownOverruning(myTimer))
 					{
 						// Countdown has overrun so treat lap times same as in stopwatch mode
+						if (myTimer->last_lap_time < myTimer->countdown_time)
+							{
+								// Last lap time was before the overrun so take the overrun time as the last lap time
+								myTimer->last_lap_time = myTimer->countdown_time;
+							}
 						t = myTimer->elapsed_time - myTimer->last_lap_time;
 					}
 					else

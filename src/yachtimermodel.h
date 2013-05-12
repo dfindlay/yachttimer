@@ -62,6 +62,7 @@
 #define STARTGUNTIME 300 * ASECOND
 #define BLUEPETERTIME 240 * ASECOND
 #define ONEMINUTETIME 60  * ASECOND
+#define SWITCH5OR4 270 * ASECOND
 #define SWITCH4OR1 120 * ASECOND
 #define WATCHMODE 	-1  // deliberate so can easily avoid WATCHMODE
 #define YACHTIMER       0

@@ -393,7 +393,11 @@ void reset_stopwatch_handler(ClickRecognizerRef recognizer, Window *window) {
 			{
 				// Now target new gun as started if above 2 mins target 4
 				// do this even if halted
-				if(t >= SWITCH4OR1)
+				if (t >= SWITCH5OR4)
+				{
+					yachtimer_reset(&myYachtTimer);
+				}
+				else if (t >= SWITCH4OR1)
 				{
 					yachtimer_setElapsed(&myYachtTimer, STARTGUNTIME - BLUEPETERTIME);
 				}
