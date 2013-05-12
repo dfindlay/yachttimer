@@ -327,22 +327,7 @@ time_t yachtimer_getLap(YachtTimer *myTimer)
 						// Save when button was pressed for laptime display
                         t = myTimer->countdown_time - myTimer->elapsed_time;
 					}
-
-//                        if(yachtimer_getMode(myTimer)==YACHTIMER)
-//                        {
-//
-//                                // Now target new gun as started if above 2 mins target 4
-//                                // do this even if halted
-//                                if(t >= SWITCH4OR1)
-//                                {
-//                                        yachtimer_setElapsed(myTimer, STARTGUNTIME - BLUEPETERTIME);
-//                                }
-//                                else  // otherwise target 1 minute
-//                                {
-//                                        yachtimer_setElapsed(myTimer, STARTGUNTIME - ONEMINUTETIME);
-//                                }
-//                        }
-                        break;
+					break;
             }
 	// Always do this so when switching mode does what you expect
 	myTimer->last_lap_time = myTimer->elapsed_time;
@@ -351,14 +336,29 @@ time_t yachtimer_getLap(YachtTimer *myTimer)
 }
 void yachtimer_reset(YachtTimer *myTimer)
 {
-
-    //  if reset what to  reset too
-    // moved this as now have watch mode and reset won't do anything in watch mode
-    // instead allow inverting is the plan
-    // if not running it is reset anyhow so do nothing
-    // if running set it to no time passed
-    yachtimer_setElapsed(myTimer,0);
-    
+    //  If reset determine what to reset to
+	time_t t = 0;
+	if ((yachtimer_getMode(myTimer) == YACHTIMER) && (yachtimer_isRunning(myTimer)))
+	{
+		// A yachttimer is running, so use logic to find the closest gun to reset to
+		t = yachtimer_getDisplayTime(myTimer);
+		if (t >= SWITCH5OR4)
+		{
+			yachtimer_setElapsed(myTimer,0);
+		}
+		else if (t >= SWITCH4OR1)
+		{
+			yachtimer_setElapsed(myTimer, STARTGUNTIME - BLUEPETERTIME);
+		}
+		else  // otherwise target 1 minute
+		{
+			yachtimer_setElapsed(myTimer, STARTGUNTIME - ONEMINUTETIME);
+		}		
+	}
+	else
+	{
+		yachtimer_setElapsed(myTimer,0);
+    }
 }
 void yachtimer_init(YachtTimer *myTimer, int appmode)
 {

@@ -379,36 +379,13 @@ void toggle_stopwatch_handler(ClickRecognizerRef recognizer, Window *window) {
 }
 
 void reset_stopwatch_handler(ClickRecognizerRef recognizer, Window *window) {
-	time_t t = 0;
     if(busy_animating) return;
 
-	t = yachtimer_getDisplayTime(&myYachtTimer);
     yachtimer_reset(&myYachtTimer);
 
     switch(watchappmode)
     {
     case YACHTIMER:
-			// In yacchttimer mode, if countdown is running then set to the nearest gun instead of back to the 5 minute
-			if(yachtimer_isRunning(&myYachtTimer))
-			{
-				// Now target new gun as started if above 2 mins target 4
-				// do this even if halted
-				if (t >= SWITCH5OR4)
-				{
-					yachtimer_reset(&myYachtTimer);
-				}
-				else if (t >= SWITCH4OR1)
-				{
-					yachtimer_setElapsed(&myYachtTimer, STARTGUNTIME - BLUEPETERTIME);
-				}
-				else  // otherwise target 1 minute
-				{
-					yachtimer_setElapsed(&myYachtTimer, STARTGUNTIME - ONEMINUTETIME);
-				}
-				update_stopwatch();
-				break;
-			}
-			// Otherwise, if timer already stopped then treat it just like in stopwatch or countdown mode
 	case STOPWATCH:
 	case COUNTDOWN:
 	    if(yachtimer_isRunning(&myYachtTimer))
